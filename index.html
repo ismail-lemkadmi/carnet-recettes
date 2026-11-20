@@ -7,18 +7,210 @@
     <title>Carnet de Recettes</title>
     <link rel="stylesheet" href="./css/style.css">
 </head>
+
 <body class="bg-gray-100">
 
-    <h1 class="text-3xl font-bold text-center mt-10">
-        Carnet de Recettes
-    </h1>
+    <main class="max-w-6xl mx-auto p-6">
 
-    <p id="recipes-count" class="ml-6 mt-6 font-bold"></p>
-<div id="recipes-list" class="grid grid-cols-1 md:grid-cols-3 gap-4 p-6">
+        <h1 class="text-3xl font-bold text-center mb-8">
+            Carnet de Recettes
+        </h1>
 
-</div>
+        <!-- US-02 : Recherche -->
+        <form id="search-form" class="flex gap-3 mb-5">
 
+            <input
+                type="text"
+                id="search-input"
+                placeholder="Rechercher une recette..."
+                class="border border-gray-300 bg-white p-3 rounded-lg flex-1 min-w-0"
+            >
+
+            <button
+                type="submit"
+                class="bg-orange-500 text-white px-4 rounded-lg cursor-pointer"
+            >
+                Rechercher
+            </button>
+
+        </form>
+
+        <!-- Bouton pour ouvrir la popup -->
+        <button
+            type="button"
+            id="open-add-btn"
+            class="bg-green-600 text-white px-4 py-3 rounded-lg mb-6 cursor-pointer"
+        >
+            + Ajouter une recette
+        </button>
+
+        <!-- US-05 : Chargement -->
+        <p id="loading" class="hidden text-blue-600 mb-4">
+            Chargement...
+        </p>
+
+        <!-- US-05 : Erreurs -->
+        <p id="error-message" class="text-red-600 mb-3"></p>
+
+        <button
+            type="button"
+            id="retry-btn"
+            class="hidden bg-red-600 text-white px-4 py-2 rounded-lg mb-4 cursor-pointer"
+        >
+            Réessayer
+        </button>
+
+        <!-- Messages de succès -->
+        <p id="success-message" class="text-green-600 mb-4"></p>
+
+        <!-- US-02 : Aucun résultat -->
+        <div id="no-results" class="hidden text-center mb-6">
+
+            <p>Aucune recette trouvée</p>
+
+            <button
+                type="button"
+                id="show-all-btn"
+                class="bg-orange-500 text-white p-3 rounded-lg mt-3 cursor-pointer"
+            >
+                Voir toutes les recettes
+            </button>
+
+        </div>
+
+        <!-- US-01 : Nombre des recettes -->
+        <p id="recipes-count" class="font-bold mb-4"></p>
+
+        <!-- US-01 : Liste des recettes -->
+        <div
+            id="recipes-list"
+            class="grid grid-cols-1 md:grid-cols-3 gap-4"
+        >
+        </div>
+
+    </main>
+
+    <!-- US-03 : Popup Ajouter une recette -->
+    <div
+        id="add-modal"
+        class="hidden fixed inset-0 z-50 bg-black/60 overflow-y-auto p-4"
+    >
+
+        <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="add-title"
+            class="bg-white rounded-xl shadow-xl p-6 max-w-lg w-full mx-auto my-8"
+        >
+
+            <div class="flex justify-between items-center mb-5">
+
+                <h2 id="add-title" class="text-2xl font-bold">
+                    Ajouter une recette
+                </h2>
+
+                <button
+                    type="button"
+                    id="close-add-btn"
+                    class="text-3xl cursor-pointer"
+                    aria-label="Fermer"
+                >
+                    &times;
+                </button>
+
+            </div>
+
+            <form id="add-form" novalidate>
+
+                <!-- Nom -->
+                <label for="recipe-name">
+                    Nom de la recette
+                </label>
+
+                <input
+                    type="text"
+                    id="recipe-name"
+                    class="border border-gray-300 p-3 rounded-lg w-full mt-2"
+                >
+
+                <p id="name-error" class="text-red-600 text-sm mb-4"></p>
+
+                <!-- Cuisine -->
+                <label for="recipe-cuisine">
+                    Cuisine
+                </label>
+
+                <input
+                    type="text"
+                    id="recipe-cuisine"
+                    class="border border-gray-300 p-3 rounded-lg w-full mt-2"
+                >
+
+                <p id="cuisine-error" class="text-red-600 text-sm mb-4"></p>
+
+                <!-- Difficulté -->
+                <label for="recipe-difficulty">
+                    Difficulté
+                </label>
+
+                <select
+                    id="recipe-difficulty"
+                    class="border border-gray-300 bg-white p-3 rounded-lg w-full mt-2"
+                >
+                    <option value="">Choisir une difficulté</option>
+                    <option value="Easy">Facile</option>
+                    <option value="Medium">Moyenne</option>
+                    <option value="Hard">Difficile</option>
+                </select>
+
+                <p id="difficulty-error" class="text-red-600 text-sm mb-4"></p>
+
+                <!-- Temps -->
+                <label for="recipe-time">
+                    Temps de préparation (min)
+                </label>
+
+                <input
+                    type="number"
+                    id="recipe-time"
+                    min="1"
+                    max="300"
+                    class="border border-gray-300 p-3 rounded-lg w-full mt-2"
+                >
+
+                <p id="time-error" class="text-red-600 text-sm mb-4"></p>
+
+                <!-- Envoyer -->
+                <button
+                    type="submit"
+                    id="add-btn"
+                    class="bg-green-600 text-white px-5 py-3 rounded-lg cursor-pointer disabled:opacity-50"
+                >
+                    Ajouter
+                </button>
+
+            </form>
+
+            <p id="add-message" class="mt-4"></p>
+
+            <!-- Réessayer en cas d'erreur d'ajout -->
+            <button
+                type="button"
+                id="add-retry-btn"
+                class="hidden bg-red-600 text-white px-4 py-2 rounded-lg mt-3 cursor-pointer"
+            >
+                Réessayer
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Axios CDN -->
     <script src="https://cdn.jsdelivr.net/npm/axios@1/dist/axios.min.js"></script>
+
+    <!-- Main JavaScript -->
     <script type="module" src="./js/app.js"></script>
+
 </body>
 </html>
